@@ -61,6 +61,7 @@
     $(".gallery").on("click", ".mg-prev", () =>
       $.fn.mauGallery.methods.prevImage(options.lightboxId)
     );
+    /* event listener added */
     $(".gallery").on("click", ".mg-next", () => {
       console.log("next button clicked");
       $.fn.mauGallery.methods.nextImage(options.lightboxId)
