@@ -31,8 +31,6 @@
    * Public Util Api
    * --------------------------------------------------------------------------
    */
-
-
   const getUID = prefix => {
     do {
       prefix += Math.floor(Math.random() * MAX_UID);
@@ -40,7 +38,6 @@
 
     return prefix;
   };
-
   const getSelector = element => {
     let selector = element.getAttribute('data-bs-target');
 
@@ -53,39 +50,28 @@
       if (!hrefAttr || !hrefAttr.includes('#') && !hrefAttr.startsWith('.')) {
         return null;
       } // Just in case some CMS puts out a full URL with the anchor appended
-
-
       if (hrefAttr.includes('#') && !hrefAttr.startsWith('#')) {
         hrefAttr = `#${hrefAttr.split('#')[1]}`;
       }
-
       selector = hrefAttr && hrefAttr !== '#' ? hrefAttr.trim() : null;
     }
-
     return selector;
   };
-
   const getSelectorFromElement = element => {
     const selector = getSelector(element);
-
     if (selector) {
       return document.querySelector(selector) ? selector : null;
     }
-
     return null;
   };
-
   const getElementFromSelector = element => {
     const selector = getSelector(element);
     return selector ? document.querySelector(selector) : null;
   };
-
   const getTransitionDurationFromElement = element => {
     if (!element) {
       return 0;
     } // Get transition-duration of the element
-
-
     let {
       transitionDuration,
       transitionDelay
@@ -96,17 +82,13 @@
     if (!floatTransitionDuration && !floatTransitionDelay) {
       return 0;
     } // If multiple durations are defined, take the first
-
-
     transitionDuration = transitionDuration.split(',')[0];
     transitionDelay = transitionDelay.split(',')[0];
     return (Number.parseFloat(transitionDuration) + Number.parseFloat(transitionDelay)) * MILLISECONDS_MULTIPLIER;
   };
-
   const triggerTransitionEnd = element => {
     element.dispatchEvent(new Event(TRANSITION_END));
   };
-
   const isElement$1 = obj => {
     if (!obj || typeof obj !== 'object') {
       return false;
@@ -118,20 +100,16 @@
 
     return typeof obj.nodeType !== 'undefined';
   };
-
   const getElement = obj => {
     if (isElement$1(obj)) {
       // it's a jQuery object or a node element
       return obj.jquery ? obj[0] : obj;
     }
-
     if (typeof obj === 'string' && obj.length > 0) {
       return document.querySelector(obj);
     }
-
     return null;
   };
-
   const typeCheckConfig = (componentName, config, configTypes) => {
     Object.keys(configTypes).forEach(property => {
       const expectedTypes = configTypes[property];
@@ -143,54 +121,40 @@
       }
     });
   };
-
   const isVisible = element => {
     if (!isElement$1(element) || element.getClientRects().length === 0) {
       return false;
     }
-
     return getComputedStyle(element).getPropertyValue('visibility') === 'visible';
   };
-
   const isDisabled = element => {
     if (!element || element.nodeType !== Node.ELEMENT_NODE) {
       return true;
     }
-
     if (element.classList.contains('disabled')) {
       return true;
     }
-
     if (typeof element.disabled !== 'undefined') {
       return element.disabled;
     }
-
     return element.hasAttribute('disabled') && element.getAttribute('disabled') !== 'false';
   };
-
   const findShadowRoot = element => {
     if (!document.documentElement.attachShadow) {
       return null;
     } // Can find the shadow root otherwise it'll return the document
-
-
     if (typeof element.getRootNode === 'function') {
       const root = element.getRootNode();
       return root instanceof ShadowRoot ? root : null;
     }
-
     if (element instanceof ShadowRoot) {
       return element;
     } // when we don't find a shadow root
-
-
     if (!element.parentNode) {
       return null;
     }
-
     return findShadowRoot(element.parentNode);
   };
-
   const noop = () => {};
   /**
    * Trick to restart an element's animation
@@ -200,27 +164,20 @@
    *
    * @see https://www.charistheo.io/blog/2021/02/restart-a-css-animation-with-javascript/#restarting-a-css-animation
    */
-
-
   const reflow = element => {
     // eslint-disable-next-line no-unused-expressions
     element.offsetHeight;
   };
-
   const getjQuery = () => {
     const {
       jQuery
     } = window;
-
     if (jQuery && !document.body.hasAttribute('data-bs-no-jquery')) {
       return jQuery;
     }
-
     return null;
   };
-
   const DOMContentLoadedCallbacks = [];
-
   const onDOMContentLoaded = callback => {
     if (document.readyState === 'loading') {
       // add listener on the first call when the document is in loading state
@@ -229,26 +186,21 @@
           DOMContentLoadedCallbacks.forEach(callback => callback());
         });
       }
-
       DOMContentLoadedCallbacks.push(callback);
     } else {
       callback();
     }
   };
-
   const isRTL = () => document.documentElement.dir === 'rtl';
-
   const defineJQueryPlugin = plugin => {
     onDOMContentLoaded(() => {
       const $ = getjQuery();
       /* istanbul ignore if */
-
       if ($) {
         const name = plugin.NAME;
         const JQUERY_NO_CONFLICT = $.fn[name];
         $.fn[name] = plugin.jQueryInterface;
         $.fn[name].Constructor = plugin;
-
         $.fn[name].noConflict = () => {
           $.fn[name] = JQUERY_NO_CONFLICT;
           return plugin.jQueryInterface;
@@ -256,35 +208,29 @@
       }
     });
   };
-
   const execute = callback => {
     if (typeof callback === 'function') {
       callback();
     }
   };
-
   const executeAfterTransition = (callback, transitionElement, waitForTransition = true) => {
     if (!waitForTransition) {
       execute(callback);
       return;
     }
-
     const durationPadding = 5;
     const emulatedDuration = getTransitionDurationFromElement(transitionElement) + durationPadding;
     let called = false;
-
     const handler = ({
       target
     }) => {
       if (target !== transitionElement) {
         return;
       }
-
       called = true;
       transitionElement.removeEventListener(TRANSITION_END, handler);
       execute(callback);
     };
-
     transitionElement.addEventListener(TRANSITION_END, handler);
     setTimeout(() => {
       if (!called) {
@@ -301,25 +247,18 @@
    * @param isCycleAllowed
    * @return {Element|elem} The proper element
    */
-
-
   const getNextActiveElement = (list, activeElement, shouldGetNext, isCycleAllowed) => {
     let index = list.indexOf(activeElement); // if the element does not exist in the list return an element depending on the direction and if cycle is allowed
-
     if (index === -1) {
       return list[!shouldGetNext && isCycleAllowed ? list.length - 1 : 0];
     }
-
     const listLength = list.length;
     index += shouldGetNext ? 1 : -1;
-
     if (isCycleAllowed) {
       index = (index + listLength) % listLength;
     }
-
     return list[Math.max(0, Math.min(index, listLength - 1))];
   };
-
   /**
    * --------------------------------------------------------------------------
    * Bootstrap (v5.1.3): dom/event-handler.js
@@ -331,12 +270,10 @@
    * Constants
    * ------------------------------------------------------------------------
    */
-
   const namespaceRegex = /[^.]*(?=\..*)\.|.*/;
   const stripNameRegex = /\..*/;
   const stripUidRegex = /::\d+$/;
   const eventRegistry = {}; // Events storage
-
   let uidEvent = 1;
   const customEvents = {
     mouseenter: 'mouseover',
@@ -349,94 +286,72 @@
    * Private methods
    * ------------------------------------------------------------------------
    */
-
   function getUidEvent(element, uid) {
     return uid && `${uid}::${uidEvent++}` || element.uidEvent || uidEvent++;
   }
-
   function getEvent(element) {
     const uid = getUidEvent(element);
     element.uidEvent = uid;
     eventRegistry[uid] = eventRegistry[uid] || {};
     return eventRegistry[uid];
   }
-
   function bootstrapHandler(element, fn) {
     return function handler(event) {
       event.delegateTarget = element;
-
       if (handler.oneOff) {
         EventHandler.off(element, event.type, fn);
       }
-
       return fn.apply(element, [event]);
     };
   }
-
   function bootstrapDelegationHandler(element, selector, fn) {
     return function handler(event) {
       const domElements = element.querySelectorAll(selector);
-
       for (let {
         target
       } = event; target && target !== this; target = target.parentNode) {
         for (let i = domElements.length; i--;) {
           if (domElements[i] === target) {
             event.delegateTarget = target;
-
             if (handler.oneOff) {
               EventHandler.off(element, event.type, selector, fn);
             }
-
             return fn.apply(target, [event]);
           }
         }
       } // To please ESLint
-
-
       return null;
     };
   }
-
   function findHandler(events, handler, delegationSelector = null) {
     const uidEventList = Object.keys(events);
-
     for (let i = 0, len = uidEventList.length; i < len; i++) {
       const event = events[uidEventList[i]];
-
       if (event.originalHandler === handler && event.delegationSelector === delegationSelector) {
         return event;
       }
     }
-
     return null;
   }
-
   function normalizeParams(originalTypeEvent, handler, delegationFn) {
     const delegation = typeof handler === 'string';
     const originalHandler = delegation ? delegationFn : handler;
     let typeEvent = getTypeEvent(originalTypeEvent);
     const isNative = nativeEvents.has(typeEvent);
-
     if (!isNative) {
       typeEvent = originalTypeEvent;
     }
-
     return [delegation, originalHandler, typeEvent];
   }
-
   function addHandler(element, originalTypeEvent, handler, delegationFn, oneOff) {
     if (typeof originalTypeEvent !== 'string' || !element) {
       return;
     }
-
     if (!handler) {
       handler = delegationFn;
       delegationFn = null;
     } // in case of mouseenter or mouseleave wrap the handler within a function that checks for its DOM position
     // this prevents the handler from being dispatched the same way as mouseover or mouseout does
-
-
     if (customEventsRegex.test(originalTypeEvent)) {
       const wrapFn = fn => {
         return function (event) {
@@ -445,24 +360,20 @@
           }
         };
       };
-
       if (delegationFn) {
         delegationFn = wrapFn(delegationFn);
       } else {
         handler = wrapFn(handler);
       }
     }
-
     const [delegation, originalHandler, typeEvent] = normalizeParams(originalTypeEvent, handler, delegationFn);
     const events = getEvent(element);
     const handlers = events[typeEvent] || (events[typeEvent] = {});
     const previousFn = findHandler(handlers, originalHandler, delegation ? handler : null);
-
     if (previousFn) {
       previousFn.oneOff = previousFn.oneOff && oneOff;
       return;
     }
-
     const uid = getUidEvent(originalHandler, originalTypeEvent.replace(namespaceRegex, ''));
     const fn = delegation ? bootstrapDelegationHandler(element, handler, delegationFn) : bootstrapHandler(element, handler);
     fn.delegationSelector = delegation ? handler : null;
@@ -472,18 +383,14 @@
     handlers[uid] = fn;
     element.addEventListener(typeEvent, fn, delegation);
   }
-
   function removeHandler(element, events, typeEvent, handler, delegationSelector) {
     const fn = findHandler(events[typeEvent], handler, delegationSelector);
-
     if (!fn) {
       return;
     }
-
     element.removeEventListener(typeEvent, fn, Boolean(delegationSelector));
     delete events[typeEvent][fn.uidEvent];
   }
-
   function removeNamespacedHandlers(element, events, typeEvent, namespace) {
     const storeElementEvent = events[typeEvent] || {};
     Object.keys(storeElementEvent).forEach(handlerKey => {
@@ -493,48 +400,39 @@
       }
     });
   }
-
   function getTypeEvent(event) {
     // allow to get the native events from namespaced events ('click.bs.button' --> 'click')
     event = event.replace(stripNameRegex, '');
     return customEvents[event] || event;
   }
-
   const EventHandler = {
     on(element, event, handler, delegationFn) {
       addHandler(element, event, handler, delegationFn, false);
     },
-
     one(element, event, handler, delegationFn) {
       addHandler(element, event, handler, delegationFn, true);
     },
-
     off(element, originalTypeEvent, handler, delegationFn) {
       if (typeof originalTypeEvent !== 'string' || !element) {
         return;
       }
-
       const [delegation, originalHandler, typeEvent] = normalizeParams(originalTypeEvent, handler, delegationFn);
       const inNamespace = typeEvent !== originalTypeEvent;
       const events = getEvent(element);
       const isNamespace = originalTypeEvent.startsWith('.');
-
       if (typeof originalHandler !== 'undefined') {
         // Simplest case: handler is passed, remove that listener ONLY.
         if (!events || !events[typeEvent]) {
           return;
         }
-
         removeHandler(element, events, typeEvent, originalHandler, delegation ? handler : null);
         return;
       }
-
       if (isNamespace) {
         Object.keys(events).forEach(elementEvent => {
           removeNamespacedHandlers(element, events, elementEvent, originalTypeEvent.slice(1));
         });
       }
-
       const storeElementEvent = events[typeEvent] || {};
       Object.keys(storeElementEvent).forEach(keyHandlers => {
         const handlerKey = keyHandlers.replace(stripUidRegex, '');
@@ -661,7 +559,6 @@
     }
 
   };
-
   /**
    * --------------------------------------------------------------------------
    * Bootstrap (v5.1.3): base-component.js
@@ -673,7 +570,6 @@
    * Constants
    * ------------------------------------------------------------------------
    */
-
   const VERSION = '5.1.3';
 
   class BaseComponent {
@@ -700,41 +596,31 @@
       executeAfterTransition(callback, element, isAnimated);
     }
     /** Static */
-
-
     static getInstance(element) {
       return Data.get(getElement(element), this.DATA_KEY);
     }
-
     static getOrCreateInstance(element, config = {}) {
       return this.getInstance(element) || new this(element, typeof config === 'object' ? config : null);
     }
-
     static get VERSION() {
       return VERSION;
     }
-
     static get NAME() {
       throw new Error('You have to implement the static method "NAME", for each component!');
     }
-
     static get DATA_KEY() {
       return `bs.${this.NAME}`;
     }
-
     static get EVENT_KEY() {
       return `.${this.DATA_KEY}`;
     }
-
   }
-
   /**
    * --------------------------------------------------------------------------
    * Bootstrap (v5.1.3): util/component-functions.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
-
   const enableDismissTrigger = (component, method = 'hide') => {
     const clickEvent = `click.dismiss${component.EVENT_KEY}`;
     const name = component.NAME;
@@ -742,18 +628,14 @@
       if (['A', 'AREA'].includes(this.tagName)) {
         event.preventDefault();
       }
-
       if (isDisabled(this)) {
         return;
       }
-
       const target = getElementFromSelector(this) || this.closest(`.${name}`);
       const instance = component.getOrCreateInstance(target); // Method argument is left, for Alert and only, as it doesn't implement the 'hide' method
-
       instance[method]();
     });
   };
-
   /**
    * --------------------------------------------------------------------------
    * Bootstrap (v5.1.3): alert.js
@@ -778,14 +660,11 @@
    * Class Definition
    * ------------------------------------------------------------------------
    */
-
   class Alert extends BaseComponent {
     // Getters
     static get NAME() {
       return NAME$d;
     } // Public
-
-
     close() {
       const closeEvent = EventHandler.trigger(this._element, EVENT_CLOSE);
 
@@ -799,16 +678,12 @@
 
       this._queueCallback(() => this._destroyElement(), this._element, isAnimated);
     } // Private
-
-
     _destroyElement() {
       this._element.remove();
 
       EventHandler.trigger(this._element, EVENT_CLOSED);
       this.dispose();
     } // Static
-
-
     static jQueryInterface(config) {
       return this.each(function () {
         const data = Alert.getOrCreateInstance(this);
@@ -831,8 +706,6 @@
    * Data Api implementation
    * ------------------------------------------------------------------------
    */
-
-
   enableDismissTrigger(Alert, 'close');
   /**
    * ------------------------------------------------------------------------
@@ -840,9 +713,7 @@
    * ------------------------------------------------------------------------
    * add .Alert to jQuery only if jQuery is present
    */
-
   defineJQueryPlugin(Alert);
-
   /**
    * --------------------------------------------------------------------------
    * Bootstrap (v5.1.3): button.js
@@ -854,7 +725,6 @@
    * Constants
    * ------------------------------------------------------------------------
    */
-
   const NAME$c = 'button';
   const DATA_KEY$b = 'bs.button';
   const EVENT_KEY$b = `.${DATA_KEY$b}`;
@@ -867,38 +737,29 @@
    * Class Definition
    * ------------------------------------------------------------------------
    */
-
   class Button extends BaseComponent {
     // Getters
     static get NAME() {
       return NAME$c;
     } // Public
-
-
     toggle() {
       // Toggle class and sync the `aria-pressed` attribute with the return value of the `.toggle()` method
       this._element.setAttribute('aria-pressed', this._element.classList.toggle(CLASS_NAME_ACTIVE$3));
     } // Static
-
-
     static jQueryInterface(config) {
       return this.each(function () {
         const data = Button.getOrCreateInstance(this);
-
         if (config === 'toggle') {
           data[config]();
         }
       });
     }
-
   }
   /**
    * ------------------------------------------------------------------------
    * Data Api implementation
    * ------------------------------------------------------------------------
    */
-
-
   EventHandler.on(document, EVENT_CLICK_DATA_API$6, SELECTOR_DATA_TOGGLE$5, event => {
     event.preventDefault();
     const button = event.target.closest(SELECTOR_DATA_TOGGLE$5);
@@ -911,9 +772,7 @@
    * ------------------------------------------------------------------------
    * add .Button to jQuery only if jQuery is present
    */
-
   defineJQueryPlugin(Button);
-
   /**
    * --------------------------------------------------------------------------
    * Bootstrap (v5.1.3): dom/manipulator.js
@@ -939,25 +798,20 @@
 
     return val;
   }
-
   function normalizeDataKey(key) {
     return key.replace(/[A-Z]/g, chr => `-${chr.toLowerCase()}`);
   }
-
   const Manipulator = {
     setDataAttribute(element, key, value) {
       element.setAttribute(`data-bs-${normalizeDataKey(key)}`, value);
     },
-
     removeDataAttribute(element, key) {
       element.removeAttribute(`data-bs-${normalizeDataKey(key)}`);
     },
-
     getDataAttributes(element) {
       if (!element) {
         return {};
       }
-
       const attributes = {};
       Object.keys(element.dataset).filter(key => key.startsWith('bs')).forEach(key => {
         let pureKey = key.replace(/^bs/, '');
@@ -970,7 +824,6 @@
     getDataAttribute(element, key) {
       return normalizeData(element.getAttribute(`data-bs-${normalizeDataKey(key)}`));
     },
-
     offset(element) {
       const rect = element.getBoundingClientRect();
       return {
@@ -978,16 +831,13 @@
         left: rect.left + window.pageXOffset
       };
     },
-
     position(element) {
       return {
         top: element.offsetTop,
         left: element.offsetLeft
       };
     }
-
   };
-
   /**
    * --------------------------------------------------------------------------
    * Bootstrap (v5.1.3): dom/selector-engine.js
@@ -1007,7 +857,6 @@
     children(element, selector) {
       return [].concat(...element.children).filter(child => child.matches(selector));
     },
-
     parents(element, selector) {
       const parents = [];
       let ancestor = element.parentNode;
@@ -1016,10 +865,8 @@
         if (ancestor.matches(selector)) {
           parents.push(ancestor);
         }
-
         ancestor = ancestor.parentNode;
       }
-
       return parents;
     },
 
@@ -1033,7 +880,6 @@
 
         previous = previous.previousElementSibling;
       }
-
       return [];
     },
 
@@ -1047,17 +893,14 @@
 
         next = next.nextElementSibling;
       }
-
       return [];
     },
-
     focusableChildren(element) {
       const focusables = ['a', 'button', 'input', 'textarea', 'select', 'details', '[tabindex]', '[contenteditable="true"]'].map(selector => `${selector}:not([tabindex^="-"])`).join(', ');
       return this.find(focusables, element).filter(el => !isDisabled(el) && isVisible(el));
     }
 
   };
-
   /**
    * --------------------------------------------------------------------------
    * Bootstrap (v5.1.3): carousel.js
@@ -1069,7 +912,6 @@
    * Constants
    * ------------------------------------------------------------------------
    */
-
   const NAME$b = 'carousel';
   const DATA_KEY$a = 'bs.carousel';
   const EVENT_KEY$a = `.${DATA_KEY$a}`;
@@ -1140,7 +982,6 @@
    * Class Definition
    * ------------------------------------------------------------------------
    */
-
   class Carousel extends BaseComponent {
     constructor(element, config) {
       super(element);
@@ -1159,21 +1000,15 @@
 
       this._addEventListeners();
     } // Getters
-
-
     static get Default() {
       return Default$a;
     }
-
     static get NAME() {
       return NAME$b;
     } // Public
-
-
     next() {
       this._slide(ORDER_NEXT);
     }
-
     nextWhenVisible() {
       // Don't call next when the page isn't visible
       // or the carousel or its parent isn't visible
@@ -1185,7 +1020,6 @@
     prev() {
       this._slide(ORDER_PREV);
     }
-
     pause(event) {
       if (!event) {
         this._isPaused = true;
@@ -1216,7 +1050,6 @@
         this._interval = setInterval((document.visibilityState ? this.nextWhenVisible : this.next).bind(this), this._config.interval);
       }
     }
-
     to(index) {
       this._activeElement = SelectorEngine.findOne(SELECTOR_ACTIVE_ITEM, this._element);
 
@@ -1342,7 +1175,6 @@
         EventHandler.on(this._element, EVENT_TOUCHEND, event => end(event));
       }
     }
-
     _keydown(event) {
       if (/input|textarea/i.test(event.target.tagName)) {
         return;
@@ -1356,17 +1188,14 @@
         this._slide(direction);
       }
     }
-
     _getItemIndex(element) {
       this._items = element && element.parentNode ? SelectorEngine.find(SELECTOR_ITEM, element.parentNode) : [];
       return this._items.indexOf(element);
     }
-
     _getItemByOrder(order, activeElement) {
       const isNext = order === ORDER_NEXT;
       return getNextActiveElement(this._items, activeElement, isNext, this._config.wrap);
     }
-
     _triggerSlideEvent(relatedTarget, eventDirectionName) {
       const targetIndex = this._getItemIndex(relatedTarget);
 
@@ -1379,7 +1208,6 @@
         to: targetIndex
       });
     }
-
     _setActiveIndicatorElement(element) {
       if (this._indicatorsElement) {
         const activeIndicator = SelectorEngine.findOne(SELECTOR_ACTIVE$1, this._indicatorsElement);
@@ -1396,7 +1224,6 @@
         }
       }
     }
-
     _updateInterval() {
       const element = this._activeElement || SelectorEngine.findOne(SELECTOR_ACTIVE_ITEM, this._element);
 
@@ -1413,7 +1240,6 @@
         this._config.interval = this._config.defaultInterval || this._config.interval;
       }
     }
-
     _slide(directionOrOrder, element) {
       const order = this._directionToOrder(directionOrOrder);
 
@@ -1857,7 +1683,6 @@
         }
       });
     }
-
     _addAriaAndCollapsedClass(triggerArray, isOpen) {
       if (!triggerArray.length) {
         return;
@@ -1873,8 +1698,6 @@
         elem.setAttribute('aria-expanded', isOpen);
       });
     } // Static
-
-
     static jQueryInterface(config) {
       return this.each(function () {
         const _config = {};
@@ -1894,15 +1717,12 @@
         }
       });
     }
-
   }
   /**
    * ------------------------------------------------------------------------
    * Data Api implementation
    * ------------------------------------------------------------------------
    */
-
-
   EventHandler.on(document, EVENT_CLICK_DATA_API$4, SELECTOR_DATA_TOGGLE$4, function (event) {
     // preventDefault only for <a> elements (which change the URL) not inside the collapsible element
     if (event.target.tagName === 'A' || event.delegateTarget && event.delegateTarget.tagName === 'A') {
@@ -1923,9 +1743,7 @@
    * ------------------------------------------------------------------------
    * add .Collapse to jQuery only if jQuery is present
    */
-
   defineJQueryPlugin(Collapse);
-
   var top = 'top';
   var bottom = 'bottom';
   var right = 'right';
@@ -1944,24 +1762,19 @@
   var placements = /*#__PURE__*/[].concat(basePlacements, [auto]).reduce(function (acc, placement) {
     return acc.concat([placement, placement + "-" + start, placement + "-" + end]);
   }, []); // modifiers that need to read the DOM
-
   var beforeRead = 'beforeRead';
   var read = 'read';
   var afterRead = 'afterRead'; // pure-logic modifiers
-
   var beforeMain = 'beforeMain';
   var main = 'main';
   var afterMain = 'afterMain'; // modifier with the purpose to write to the DOM (or write into a framework state)
-
   var beforeWrite = 'beforeWrite';
   var write = 'write';
   var afterWrite = 'afterWrite';
   var modifierPhases = [beforeRead, read, afterRead, beforeMain, main, afterMain, beforeWrite, write, afterWrite];
-
   function getNodeName(element) {
     return element ? (element.nodeName || '').toLowerCase() : null;
   }
-
   function getWindow(node) {
     if (node == null) {
       return window;
@@ -3187,7 +3000,6 @@
     requires: ['popperOffsets'],
     fn: offset
   };
-
   function popperOffsets(_ref) {
     var state = _ref.state,
         name = _ref.name;
@@ -3202,8 +3014,6 @@
       placement: state.placement
     });
   } // eslint-disable-next-line import/no-unused-modules
-
-
   const popperOffsets$1 = {
     name: 'popperOffsets',
     enabled: true,
@@ -3318,8 +3128,6 @@
 
     state.modifiersData[name] = data;
   } // eslint-disable-next-line import/no-unused-modules
-
-
   const preventOverflow$1 = {
     name: 'preventOverflow',
     enabled: true,
@@ -3342,7 +3150,6 @@
       return getHTMLElementScroll(node);
     }
   }
-
   function isElementScaled(element) {
     var rect = element.getBoundingClientRect();
     var scaleX = rect.width / element.offsetWidth || 1;
@@ -3451,7 +3258,6 @@
       return pending;
     };
   }
-
   function mergeByName(modifiers) {
     var merged = modifiers.reduce(function (merged, current) {
       var existing = merged[current.name];
@@ -3466,7 +3272,6 @@
       return merged[key];
     });
   }
-
   var DEFAULT_OPTIONS = {
     placement: 'bottom',
     modifiers: [],
@@ -3482,12 +3287,10 @@
       return !(element && typeof element.getBoundingClientRect === 'function');
     });
   }
-
   function popperGenerator(generatorOptions) {
     if (generatorOptions === void 0) {
       generatorOptions = {};
     }
-
     var _generatorOptions = generatorOptions,
         _generatorOptions$def = _generatorOptions.defaultModifiers,
         defaultModifiers = _generatorOptions$def === void 0 ? [] : _generatorOptions$def,
@@ -3497,7 +3300,6 @@
       if (options === void 0) {
         options = defaultOptions;
       }
-
       var state = {
         placement: 'bottom',
         orderedModifiers: [],
@@ -3580,7 +3382,6 @@
               index = -1;
               continue;
             }
-
             var _state$orderedModifie = state.orderedModifiers[index],
                 fn = _state$orderedModifie.fn,
                 _state$orderedModifie2 = _state$orderedModifie.options,
@@ -3625,7 +3426,6 @@
       // cycle. This is useful when a modifier adds some persistent data that
       // other modifiers need to use, but the modifier is run after the dependent
       // one.
-
       function runModifierEffects() {
         state.orderedModifiers.forEach(function (_ref3) {
           var name = _ref3.name,
@@ -3664,12 +3464,10 @@
   var createPopper$1 = /*#__PURE__*/popperGenerator({
     defaultModifiers: defaultModifiers$1
   }); // eslint-disable-next-line import/no-unused-modules
-
   var defaultModifiers = [eventListeners, popperOffsets$1, computeStyles$1, applyStyles$1, offset$1, flip$1, preventOverflow$1, arrow$1, hide$1];
   var createPopper = /*#__PURE__*/popperGenerator({
     defaultModifiers: defaultModifiers
   }); // eslint-disable-next-line import/no-unused-modules
-
   const Popper = /*#__PURE__*/Object.freeze({
     __proto__: null,
     popperGenerator,
@@ -3711,7 +3509,6 @@
     popperOffsets: popperOffsets$1,
     preventOverflow: preventOverflow$1
   });
-
   /**
    * --------------------------------------------------------------------------
    * Bootstrap (v5.1.3): dropdown.js
@@ -3723,7 +3520,6 @@
    * Constants
    * ------------------------------------------------------------------------
    */
-
   const NAME$9 = 'dropdown';
   const DATA_KEY$8 = 'bs.dropdown';
   const EVENT_KEY$8 = `.${DATA_KEY$8}`;
@@ -3734,7 +3530,6 @@
   const ARROW_UP_KEY = 'ArrowUp';
   const ARROW_DOWN_KEY = 'ArrowDown';
   const RIGHT_MOUSE_BUTTON = 2; // MouseEvent.button value for the secondary button, usually the right button
-
   const REGEXP_KEYDOWN = new RegExp(`${ARROW_UP_KEY}|${ARROW_DOWN_KEY}|${ESCAPE_KEY$2}`);
   const EVENT_HIDE$4 = `hide${EVENT_KEY$8}`;
   const EVENT_HIDDEN$4 = `hidden${EVENT_KEY$8}`;
@@ -3779,7 +3574,6 @@
    * Class Definition
    * ------------------------------------------------------------------------
    */
-
   class Dropdown extends BaseComponent {
     constructor(element, config) {
       super(element);
@@ -3788,8 +3582,6 @@
       this._menu = this._getMenuElement();
       this._inNavbar = this._detectNavbar();
     } // Getters
-
-
     static get Default() {
       return Default$8;
     }
@@ -3831,8 +3623,6 @@
       // empty mouseover listeners to the body's immediate children;
       // only needed because of broken event delegation on iOS
       // https://www.quirksmode.org/blog/archives/2014/02/mouse_event_bub.html
-
-
       if ('ontouchstart' in document.documentElement && !parent.closest(SELECTOR_NAVBAR_NAV)) {
         [].concat(...document.body.children).forEach(elem => EventHandler.on(elem, 'mouseover', noop));
       }
@@ -3867,7 +3657,6 @@
 
       super.dispose();
     }
-
     update() {
       this._inNavbar = this._detectNavbar();
 
@@ -3875,8 +3664,6 @@
         this._popper.update();
       }
     } // Private
-
-
     _completeHide(relatedTarget) {
       const hideEvent = EventHandler.trigger(this._element, EVENT_HIDE$4, relatedTarget);
 
@@ -3884,8 +3671,6 @@
         return;
       } // If this is a touch-enabled device we remove the extra
       // empty mouseover listeners we added for iOS support
-
-
       if ('ontouchstart' in document.documentElement) {
         [].concat(...document.body.children).forEach(elem => EventHandler.off(elem, 'mouseover', noop));
       }
@@ -3903,7 +3688,6 @@
       Manipulator.removeDataAttribute(this._menu, 'popper');
       EventHandler.trigger(this._element, EVENT_HIDDEN$4, relatedTarget);
     }
-
     _getConfig(config) {
       config = { ...this.constructor.Default,
         ...Manipulator.getDataAttributes(this._element),
@@ -3962,8 +3746,6 @@
       if (parentDropdown.classList.contains(CLASS_NAME_DROPSTART)) {
         return PLACEMENT_LEFT;
       } // We need to trim the value because custom properties can also include spaces
-
-
       const isEnd = getComputedStyle(this._menu).getPropertyValue('--bs-position').trim() === 'end';
 
       if (parentDropdown.classList.contains(CLASS_NAME_DROPUP)) {
@@ -4031,12 +3813,8 @@
         return;
       } // if target isn't included in items (e.g. when expanding the dropdown)
       // allow cycling to get the last item in case key equals ARROW_UP_KEY
-
-
       getNextActiveElement(items, target, key === ARROW_DOWN_KEY, !items.includes(target)).focus();
     } // Static
-
-
     static jQueryInterface(config) {
       return this.each(function () {
         const data = Dropdown.getOrCreateInstance(this, config);
@@ -4100,7 +3878,6 @@
     static getParentFromElement(element) {
       return getElementFromSelector(element) || element.parentNode;
     }
-
     static dataApiKeydownHandler(event) {
       // If not input/textarea:
       //  - And not a key in REGEXP_KEYDOWN => not a dropdown command
@@ -4155,8 +3932,6 @@
    * Data Api implementation
    * ------------------------------------------------------------------------
    */
-
-
   EventHandler.on(document, EVENT_KEYDOWN_DATA_API, SELECTOR_DATA_TOGGLE$3, Dropdown.dataApiKeydownHandler);
   EventHandler.on(document, EVENT_KEYDOWN_DATA_API, SELECTOR_MENU, Dropdown.dataApiKeydownHandler);
   EventHandler.on(document, EVENT_CLICK_DATA_API$3, Dropdown.clearMenus);
@@ -4171,9 +3946,7 @@
    * ------------------------------------------------------------------------
    * add .Dropdown to jQuery only if jQuery is present
    */
-
   defineJQueryPlugin(Dropdown);
-
   /**
    * --------------------------------------------------------------------------
    * Bootstrap (v5.1.3): util/scrollBar.js
@@ -4847,8 +4620,6 @@
     } // ----------------------------------------------------------------------
     // the following methods are used to handle overflowing modals
     // ----------------------------------------------------------------------
-
-
     _adjustDialog() {
       const isModalOverflowing = this._element.scrollHeight > document.documentElement.clientHeight;
 
@@ -4869,8 +4640,6 @@
       this._element.style.paddingLeft = '';
       this._element.style.paddingRight = '';
     } // Static
-
-
     static jQueryInterface(config, relatedTarget) {
       return this.each(function () {
         const data = Modal.getOrCreateInstance(this, config);
@@ -4893,8 +4662,6 @@
    * Data Api implementation
    * ------------------------------------------------------------------------
    */
-
-
   EventHandler.on(document, EVENT_CLICK_DATA_API$2, SELECTOR_DATA_TOGGLE$2, function (event) {
     const target = getElementFromSelector(this);
 
@@ -4907,7 +4674,6 @@
         // only register focus restorer if modal will actually get shown
         return;
       }
-
       EventHandler.one(target, EVENT_HIDDEN$3, () => {
         if (isVisible(this)) {
           this.focus();
@@ -4931,9 +4697,7 @@
    * ------------------------------------------------------------------------
    * add .Modal to jQuery only if jQuery is present
    */
-
   defineJQueryPlugin(Modal);
-
   /**
    * --------------------------------------------------------------------------
    * Bootstrap (v5.1.3): offcanvas.js
@@ -4945,7 +4709,6 @@
    * Constants
    * ------------------------------------------------------------------------
    */
-
   const NAME$5 = 'offcanvas';
   const DATA_KEY$5 = 'bs.offcanvas';
   const EVENT_KEY$5 = `.${DATA_KEY$5}`;
@@ -4977,7 +4740,6 @@
    * Class Definition
    * ------------------------------------------------------------------------
    */
-
   class Offcanvas extends BaseComponent {
     constructor(element, config) {
       super(element);
@@ -4988,21 +4750,15 @@
 
       this._addEventListeners();
     } // Getters
-
-
     static get NAME() {
       return NAME$5;
     }
-
     static get Default() {
       return Default$4;
     } // Public
-
-
     toggle(relatedTarget) {
       return this._isShown ? this.hide() : this.show(relatedTarget);
     }
-
     show(relatedTarget) {
       if (this._isShown) {
         return;
@@ -5045,7 +4801,6 @@
 
       this._queueCallback(completeCallBack, this._element, true);
     }
-
     hide() {
       if (!this._isShown) {
         return;
@@ -5093,8 +4848,6 @@
 
       super.dispose();
     } // Private
-
-
     _getConfig(config) {
       config = { ...Default$4,
         ...Manipulator.getDataAttributes(this._element),
@@ -5127,8 +4880,6 @@
         }
       });
     } // Static
-
-
     static jQueryInterface(config) {
       return this.each(function () {
         const data = Offcanvas.getOrCreateInstance(this, config);
@@ -5151,8 +4902,6 @@
    * Data Api implementation
    * ------------------------------------------------------------------------
    */
-
-
   EventHandler.on(document, EVENT_CLICK_DATA_API$1, SELECTOR_DATA_TOGGLE$1, function (event) {
     const target = getElementFromSelector(this);
 
@@ -5187,9 +4936,7 @@
    * jQuery
    * ------------------------------------------------------------------------
    */
-
   defineJQueryPlugin(Offcanvas);
-
   /**
    * --------------------------------------------------------------------------
    * Bootstrap (v5.1.3): util/sanitizer.js
@@ -5203,14 +4950,12 @@
    *
    * Shoutout to Angular https://github.com/angular/angular/blob/12.2.x/packages/core/src/sanitization/url_sanitizer.ts
    */
-
   const SAFE_URL_PATTERN = /^(?:(?:https?|mailto|ftp|tel|file|sms):|[^#&/:?]*(?:[#/?]|$))/i;
   /**
    * A pattern that matches safe data URLs. Only matches image, video and audio types.
    *
    * Shoutout to Angular https://github.com/angular/angular/blob/12.2.x/packages/core/src/sanitization/url_sanitizer.ts
    */
-
   const DATA_URL_PATTERN = /^data:(?:image\/(?:bmp|gif|jpeg|jpg|png|tiff|webp)|video\/(?:mpeg|mp4|ogg|webm)|audio\/(?:mp3|oga|ogg|opus));base64,[\d+/a-z]+=*$/i;
 
   const allowedAttribute = (attribute, allowedAttributeList) => {
@@ -5234,7 +4979,6 @@
 
     return false;
   };
-
   const DefaultAllowlist = {
     // Global attributes allowed on any supplied element below.
     '*': ['class', 'dir', 'id', 'lang', 'role', ARIA_ATTRIBUTE_PATTERN],
@@ -5276,11 +5020,9 @@
     if (sanitizeFn && typeof sanitizeFn === 'function') {
       return sanitizeFn(unsafeHtml);
     }
-
     const domParser = new window.DOMParser();
     const createdDocument = domParser.parseFromString(unsafeHtml, 'text/html');
     const elements = [].concat(...createdDocument.body.querySelectorAll('*'));
-
     for (let i = 0, len = elements.length; i < len; i++) {
       const element = elements[i];
       const elementName = element.nodeName.toLowerCase();
@@ -5301,7 +5043,6 @@
 
     return createdDocument.body.innerHTML;
   }
-
   /**
    * --------------------------------------------------------------------------
    * Bootstrap (v5.1.3): tooltip.js
@@ -5313,7 +5054,6 @@
    * Constants
    * ------------------------------------------------------------------------
    */
-
   const NAME$4 = 'tooltip';
   const DATA_KEY$4 = 'bs.tooltip';
   const EVENT_KEY$4 = `.${DATA_KEY$4}`;
@@ -5393,7 +5133,6 @@
    * Class Definition
    * ------------------------------------------------------------------------
    */
-
   class Tooltip extends BaseComponent {
     constructor(element, config) {
       if (typeof Popper === 'undefined') {
@@ -5413,8 +5152,6 @@
 
       this._setListeners();
     } // Getters
-
-
     static get Default() {
       return Default$3;
     }
@@ -5430,8 +5167,6 @@
     static get DefaultType() {
       return DefaultType$3;
     } // Public
-
-
     enable() {
       this._isEnabled = true;
     }
@@ -5469,7 +5204,6 @@
         this._enter(null, this);
       }
     }
-
     dispose() {
       clearTimeout(this._timeout);
       EventHandler.off(this._element.closest(SELECTOR_MODAL), EVENT_MODAL_HIDE, this._hideModalHandler);
@@ -5482,7 +5216,6 @@
 
       super.dispose();
     }
-
     show() {
       if (this._element.style.display === 'none') {
         throw new Error('Please use show on visible elements');
@@ -5500,8 +5233,6 @@
         return;
       } // A trick to recreate a tooltip in case a new title is given by using the NOT documented `data-bs-original-title`
       // This will be removed later in favor of a `setContent` method
-
-
       if (this.constructor.NAME === 'tooltip' && this.tip && this.getTitle() !== this.tip.querySelector(SELECTOR_TOOLTIP_INNER).innerHTML) {
         this._disposePopper();
 
@@ -5544,7 +5275,6 @@
       tip.classList.add(CLASS_NAME_SHOW$2);
 
       const customClass = this._resolvePossibleFunction(this._config.customClass);
-
       if (customClass) {
         tip.classList.add(...customClass.split(' '));
       } // If this is a touch-enabled device we add extra
@@ -5573,7 +5303,6 @@
 
       this._queueCallback(complete, this.tip, isAnimated);
     }
-
     hide() {
       if (!this._popper) {
         return;
@@ -5627,12 +5356,9 @@
         this._popper.update();
       }
     } // Protected
-
-
     isWithContent() {
       return Boolean(this.getTitle());
     }
-
     getTipElement() {
       if (this.tip) {
         return this.tip;
@@ -5658,11 +5384,8 @@
         templateElement.remove();
         return;
       } // we use append for html objects to maintain js events
-
-
       this.setElementContent(templateElement, content);
     }
-
     setElementContent(element, content) {
       if (element === null) {
         return;
@@ -5711,8 +5434,6 @@
 
       return attachment;
     } // Private
-
-
     _initializeOnDelegatedTarget(event, context) {
       return context || this.constructor.getOrCreateInstance(event.delegateTarget, this._getDelegateConfig());
     }
@@ -5878,7 +5599,6 @@
         context.hide();
         return;
       }
-
       context._timeout = setTimeout(() => {
         if (context._hoverState === HOVER_STATE_OUT) {
           context.hide();
@@ -5985,8 +5705,6 @@
         this._popper = null;
       }
     } // Static
-
-
     static jQueryInterface(config) {
       return this.each(function () {
         const data = Tooltip.getOrCreateInstance(this, config);
@@ -6023,7 +5741,6 @@
    * Constants
    * ------------------------------------------------------------------------
    */
-
   const NAME$3 = 'popover';
   const DATA_KEY$3 = 'bs.popover';
   const EVENT_KEY$3 = `.${DATA_KEY$3}`;
@@ -6095,8 +5812,6 @@
     _getBasicClassPrefix() {
       return CLASS_PREFIX;
     } // Static
-
-
     static jQueryInterface(config) {
       return this.each(function () {
         const data = Popover.getOrCreateInstance(this, config);
@@ -6343,8 +6058,6 @@
    * Data Api implementation
    * ------------------------------------------------------------------------
    */
-
-
   EventHandler.on(window, EVENT_LOAD_DATA_API, () => {
     SelectorEngine.find(SELECTOR_DATA_SPY).forEach(spy => new ScrollSpy(spy));
   });
