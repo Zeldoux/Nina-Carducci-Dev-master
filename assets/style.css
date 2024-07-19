@@ -101,7 +101,8 @@ nav h1{
 	justify-content: center;
 }
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-	color: #fff;
+	/* modifications de la couleurs de fonds pour être valid au criteres AA AAA*/
+	color: black;
 	background-color: #BEB45A;
 	border-radius:0 ;
 }
