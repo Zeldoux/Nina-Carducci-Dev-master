@@ -1,0 +1,5 @@
+1- images toujours non reconnu comme correctement redimentioner / formater
+
+2- minifications des fichiers bootstrap provoque un soucis daffichage de la gallery
+
+3-référencement local et google business ajouts d'un business 
