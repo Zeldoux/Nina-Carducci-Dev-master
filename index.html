@@ -3,10 +3,58 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="description" content="site de Nina Carducci photographe professionel propose c'est service et un aperçu de ça gallerie">
-	<!-- ajouts du titre -->
-	<title>Découvrez le site de la photographe professionel Nina Carducci</title>
 	
+	<!-- ajouts d'un titre et d'une description-->
+	<meta name="description" content="Nina Carducci, photographe professionnelle, propose des services de shooting photo à Bordeaux. Capturez vos moments précieux que ce soit pour des mariages , des portraits , ou des événements avec des photos de haute qualité.">
+	<title>Nina Carducci - Shooting Photo Professionnel à Bordeaux</title>
+	<!-- Open Graph meta tags -->
+	<meta property="og:title" content="Nina Carducci - Photographe Professionnelle à Bordeaux">
+	<meta property="og:description" content="Services de photographie professionnelle incluant shootings photo, retouches, et albums photos à Bordeaux.">
+	<meta property="og:image" content="https://zeldoux.github.io/projet-4-Nina-Carducci-Dev-master/assets/images/nina.webp">
+	<meta property="og:url" content="https://zeldoux.github.io/projet-4-Nina-Carducci-Dev-master/">
+	<meta property="og:sitename" content="Nina Carducci Photographe professionnelle" />
+	<meta property="og:type" content="website" />
+
+	<!-- Twitter Cards meta tags -->
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:site" content="@monCompteTwitter" />
+	<meta name="twitter:title" content="Nina Carducci - Photographe Professionnelle à Bordeaux">
+	<meta name="twitter:description" content="Services de photographie professionnelle incluant shootings photo, retouches, et albums photos à Bordeaux.">
+	<meta name="twitter:image" content="https://zeldoux.github.io/projet-4-Nina-Carducci-Dev-master/assets/images/nina.webp">
+	<meta name="twitter:url" content="https://zeldoux.github.io/projet-4-Nina-Carducci-Dev-master/" />
+
+	<!-- script pour ajouter le JSON-LD de schema.org -->
+	<script type="application/ld+json">
+		{
+		  "@context": "https://schema.org",
+		  "@type": "Service",
+		  "name": "Shooting photo",
+		  "description": "Capturer vos moments les plus précieux avec une photographe professionnelle à Bordeaux.",
+		  "provider": {
+			"@type": "Person",
+			"name": "Nina Carducci",
+			"jobTitle": "Photographe Professionnelle",
+			"telephone": "05 56 67 78 89",
+			"address": {
+			  "@type": "PostalAddress",
+			  "addressLocality": "Bordeaux",
+			  "addressRegion": "Nouvelle-Aquitaine",
+			  "postalCode": "33200",
+			  "streetAddress": "68 avenue Alsace-Lorraine"
+			}
+		  },
+		  "areaServed": {
+			"@type": "Place",
+			"name": "Bordeaux"
+		  },
+		  "offers": {
+			"@type": "Offer",
+			"url": "https://zeldoux.github.io/projet-4-Nina-Carducci-Dev-master/",
+			"availability": "http://schema.org/InStock"
+		  }
+		}
+		</script>
+		
 	<!-- Précharger et charger les styles de manière asynchrone -->
 	<link rel="preload" href="./assets/bootstrap/mimifiedbootstrap.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
 	<noscript><link rel="stylesheet" href="./assets/bootstrap/mimifiedbootstrap.css"></noscript>
@@ -26,7 +74,7 @@
 </head>
 <body>
 <nav>
-	<h1 class="name">Nina Carducci</h1>
+	<h1 class="name">Shooting Photo Professionnel à Bordeaux</h1>
 	<div class="nav-menu">   
 		<ul>
 			<li><a href="#about">À propos</a></li>

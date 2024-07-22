@@ -1,0 +1,30 @@
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "name": "Shooting photo",
+  "description": "Capturer vos moments les plus précieux avec une photographe professionnelle à Bordeaux.",
+  "provider": {
+    "@type": "Person",
+    "name": "Nina Carducci",
+    "jobTitle": "Photographe Professionnelle",
+    "telephone": "05 56 67 78 89",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Bordeaux",
+      "addressRegion": "Nouvelle-Aquitaine",
+      "postalCode": "33200",
+      "streetAddress": "68 avenue Alsace-Lorraine"
+    }
+  },
+  "areaServed": {
+    "@type": "Place",
+    "name": "Bordeaux"
+  },
+  "offers": {
+    "@type": "Offer",
+    "url": "https://zeldoux.github.io/projet-4-Nina-Carducci-Dev-master/",
+    "availability": "http://schema.org/InStock"
+  }
+}
+</script>
