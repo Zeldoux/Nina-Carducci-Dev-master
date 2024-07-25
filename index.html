@@ -143,8 +143,12 @@
   
 	<link rel="preload" href="./assets/style.css" as="style">
 	<link rel="stylesheet" href="./assets/style.css">
+	<!-- Précharger les fonts qui provoque un load layout important -->
+	<link rel="preload" href="myfont.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+	
 
 	<!-- Préconnecter et précharger les polices Google -->
+	 
 	<link rel="preconnect" href="https://fonts.googleapis.com">
  	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Inter&family=Spectral:ital,wght@0,400;1,300;1,400;1,800&display=swap" rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'">
