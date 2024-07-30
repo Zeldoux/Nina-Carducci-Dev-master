@@ -241,6 +241,13 @@ input[type="submit"] {
 	}
 }
 @media all and (max-width: 1000px) {
+	/* ajouts d'une régle pour corriger l'apparence de la nav en version tablette */
+	nav {
+		display:flex;
+		flex-direction: column;
+		width:100%;
+		padding:0.5em;
+	}
 	#about{
 		flex-direction: column;
 	}
@@ -296,6 +303,14 @@ input[type="submit"] {
 	}
 }
 @media all and (max-width: 650px) {
+	/* ajouts d'une régle pour corriger l'apparence de la nav en version mobile */
+	nav {
+		display:flex;
+		flex-direction: column;
+		width:100%;
+		padding:1em;
+	}
+
 	.top-header {
 		flex-direction: column;
 		padding-inline: 0;
