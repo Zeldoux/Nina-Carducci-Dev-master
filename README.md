@@ -14,15 +14,15 @@ Déboguer et optimiser un site web pour la photographe Nina Carducci afin d'amé
 
 ## Éléments fournis pour le projet :
 
-    - un liens vers le sites a debuggez/optimisez : nina-carducci.github.io
-    - une Audit du site ninacarducci.github.io , 
-    Pour rédiger le rapport détaillant les modifications effectuées, un modèle de rapport d’intervention.   
-    - un repo GitHub contenant le sites web https://github.com/OpenClassrooms-Student-Center/Nina-Carducci-Dev
+ - un liens vers le sites a debuggez/optimisez : nina-carducci.github.io
+ - une Audit du site ninacarducci.github.io , 
+   Pour rédiger le rapport détaillant les modifications effectuées, un modèle de rapport d’intervention.   
+ - un repo GitHub contenant le sites web https://github.com/OpenClassrooms-Student-Center/Nina-Carducci-Dev
 
 ## Outils utiliser : 
-    1. Css
-    2. html
-    3. javascript
+1. Css
+2. html
+3. javascript
 
 ## outils externe utilisers :
 
@@ -32,14 +32,14 @@ Déboguer et optimiser un site web pour la photographe Nina Carducci afin d'amé
   
   ### Analyse et d'audit : 
   
-    - WAVE  pour analyser et réaliser une audit de l'accesibilité du site 
-    - Colour contrast Analyser (https://www.tpgi.com/color-contrast-checker/) pour l'analyse des contraste lié a l'accesibilité  
+  - WAVE  pour analyser et réaliser une audit de l'accesibilité du site 
+  - Colour contrast Analyser (https://www.tpgi.com/color-contrast-checker/) pour l'analyse des contraste lié a l'accesibilité  
       
-    - Lighthouse // PageSpeed pour une audit globale du site aussi bien pour le SEO , l'accesibilité et les performances 
+  - Lighthouse // PageSpeed pour une audit globale du site aussi bien pour le SEO , l'accesibilité et les performances 
       
-    - https://validator.schema.org/ pour vérifier la validité des balises méta réseaux sociaux
+  - https://validator.schema.org/ pour vérifier la validité des balises méta réseaux sociaux
       
-    - https://www.outiref.fr/ pour obtenir diverse informations relative au sites (key-words // structure Hn ect...)
+  - https://www.outiref.fr/ pour obtenir diverse informations relative au sites (key-words // structure Hn ect...)
 
 
 
