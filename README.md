@@ -42,4 +42,4 @@ Déboguer et optimiser un site web pour la photographe Nina Carducci afin d'amé
   - https://www.outiref.fr/ pour obtenir diverse informations relative au sites (key-words // structure Hn ect...)
 
 
-
+### le rapport d'intervention est directement disponible dans le repo (rapport_intervention.pdf)
