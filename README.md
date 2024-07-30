@@ -19,7 +19,7 @@ Déboguer et optimiser un site web pour la photographe Nina Carducci afin d'amé
    Pour rédiger le rapport détaillant les modifications effectuées, un modèle de rapport d’intervention.   
  - un repo GitHub contenant le sites web https://github.com/OpenClassrooms-Student-Center/Nina-Carducci-Dev
 
-## Outils utiliser : 
+## Technologies utilisées : 
 1. Css
 2. html
 3. javascript
